@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resayil App - Screen Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e9edef;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-top: 20px;
+        }
+
+        header h1 {
+            font-size: 48px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #00a884, #00d4aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            font-size: 18px;
+            color: #8696a0;
+            margin-bottom: 8px;
+        }
+
+        header .version {
+            font-size: 14px;
+            color: #8696a0;
+            opacity: 0.7;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-tab {
+            padding: 10px 20px;
+            background: rgba(0, 168, 132, 0.1);
+            border: 1px solid #00a884;
+            border-radius: 20px;
+            color: #00a884;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-tab:hover {
+            background: rgba(0, 168, 132, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 32px;
+            margin-bottom: 60px;
+        }
+
+        .screen-card {
+            background: rgba(31, 44, 52, 0.5);
+            border: 1px solid #2a3942;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            height: 380px;
+        }
+
+        .screen-card:hover {
+            border-color: #00a884;
+            background: rgba(31, 44, 52, 0.8);
+            box-shadow: 0 8px 32px rgba(0, 168, 132, 0.2);
+            transform: translateY(-8px);
+        }
+
+        .screen-preview {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, #111b21, #0b141a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screen-preview::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(0, 168, 132, 0.1) 50%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .screen-preview-icon {
+            position: relative;
+            z-index: 1;
+        }
+
+        .screen-info {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100px;
+        }
+
+        .screen-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #e9edef;
+            margin-bottom: 8px;
+        }
+
+        .screen-description {
+            font-size: 12px;
+            color: #8696a0;
+            line-height: 1.4;
+            flex: 1;
+            margin-bottom: 12px;
+        }
+
+        .view-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #00a884, #008069);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .view-btn:hover {
+            background: linear-gradient(135deg, #00b890, #00906f);
+            transform: scale(1.05);
+        }
+
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid rgba(0, 168, 132, 0.3);
+            color: #e9edef;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid #2a3942;
+            color: #8696a0;
+            font-size: 13px;
+        }
+
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+            font-size: 12px;
+        }
+
+        .tech-badge {
+            padding: 6px 12px;
+            background: rgba(0, 168, 132, 0.1);
+            border: 1px solid rgba(0, 168, 132, 0.3);
+            border-radius: 12px;
+            color: #00a884;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 32px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .screen-card {
+                height: 360px;
+            }
+
+            .screen-preview {
+                height: 240px;
+            }
+
+            .screen-info {
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Resayil App Preview</h1>
+            <p>Mobile WhatsApp Business Platform</p>
+            <div class="version">Version 1.0.0 • Email/Password Authentication</div>
+        </header>
+
+        <div class="nav-tabs">
+            <a href="#auth" class="nav-tab">🔐 Authentication</a>
+            <a href="#messaging" class="nav-tab">💬 Messaging</a>
+            <a href="#status" class="nav-tab">✨ Status</a>
+            <a href="#user" class="nav-tab">👤 User</a>
+        </div>
+
+        <!-- Authentication Section -->
+        <div class="section" id="auth">
+            <h2 class="section-title">🔐 Authentication & Onboarding</h2>
+            <div class="grid">
+                <div class="screen-card">
+                    <div class="screen-preview">
+                        <div class="screen-preview-icon">🔓</div>
+                    </div>
+                    <div class="screen-info">
+                        <div>
+                            <div class="screen-title">Login Screen</div>
+                            <div class="screen-description">Email/password authentication with forgot password & register links</div>
+                        </div>
+                        <a href="login.html" class="view-btn">View Screen →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messaging Section -->
+        <div class="section" id="messaging">
+            <h2 class="section-title">💬 Messaging & Chats</h2>
+            <div class="grid">
+                <div class="screen-card">
+                    <div class="screen-preview">
+                        <div class="screen-preview-icon">📱</div>
+                    </div>
+                    <div class="screen-info">
+                        <div>
+                            <div class="screen-title">Chat List</div>
+                            <div class="screen-description">Main chat list with search, filters, and unread indicators</div>
+                        </div>
+                        <a href="chat-list.html" class="view-btn">View Screen →</a>
+                    </div>
+                </div>
+
+                <div class="screen-card">
+                    <div class="screen-preview">
+                        <div class="screen-preview-icon">💬</div>
+                    </div>
+                    <div class="screen-info">
+                        <div>
+                            <div class="screen-title">Chat Messages</div>
+                            <div class="screen-description">Real-time messaging with optimistic UI and message status</div>
+                        </div>
+                        <a href="chat-detail.html" class="view-btn">View Screen →</a>
+                    </div>
+                </div>
+
+                <div class="screen-card">
+                    <div class="screen-preview">
+                        <div class="screen-preview-icon">📞</div>
+                    </div>
+                    <div class="screen-info">
+                        <div>
+                            <div class="screen-title">Contacts</div>
+                            <div class="screen-description">Contact picker for selecting recipients</div>
+                        </div>
+                        <a href="contacts.html" class="view-btn">View Screen →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Section -->
+        <div class="section" id="status">
+            <h2 class="section-title">✨ Status & Stories</h2>
+            <div class="grid">
+                <div class="screen-card">
+                    <div class="screen-preview">
+                        <div class="screen-preview-icon">📸</div>
+                    </div>
+                    <div class="screen-info">
+                        <div>
+                            <div class="screen-title">Status List</div>
+                            <div class="screen-description">View recent status updates with unviewed indicators</div>
+                        </div>
+                        <a href="status-list.html" class="view-btn">View Screen →</a>
+                    </div>
+                </div>
+
+                <div class="screen-card">
+                    <div class="screen-preview">
+                        <div class="screen-preview-icon">🎬</div>
+                    </div>
+                    <div class="screen-info">
+                        <div>
+                            <div class="screen-title">Status Viewer</div>
+                            <div class="screen-description">Full-screen story viewer with reactions and replies</div>
+                        </div>
+                        <a href="status-viewer.html" class="view-btn">View Screen →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Section -->
+        <div class="section" id="user">
+            <h2 class="section-title">👤 User Profile & Settings</h2>
+            <div class="grid">
+                <div class="screen-card">
+                    <div class="screen-preview">
+                        <div class="screen-preview-icon">👤</div>
+                    </div>
+                    <div class="screen-info">
+                        <div>
+                            <div class="screen-title">Profile</div>
+                            <div class="screen-description">User profile with editable fields and avatar</div>
+                        </div>
+                        <a href="profile.html" class="view-btn">View Screen →</a>
+                    </div>
+                </div>
+
+                <div class="screen-card">
+                    <div class="screen-preview">
+                        <div class="screen-preview-icon">⚙️</div>
+                    </div>
+                    <div class="screen-info">
+                        <div>
+                            <div class="screen-title">Settings</div>
+                            <div class="screen-description">Settings for notifications, language, and preferences</div>
+                        </div>
+                        <a href="settings.html" class="view-btn">View Screen →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div style="margin-bottom: 16px;">
+                <strong>Resayil Mobile App - HTML/CSS Mockups</strong>
+            </div>
+            <p style="margin-bottom: 16px;">
+                These mockups are created based on the actual Flutter codebase and match the WhatsApp-style UI design.
+                All screens are responsive and built with pure HTML/CSS without any frameworks.
+            </p>
+            <div class="tech-stack">
+                <div class="tech-badge">Flutter 3.27.4</div>
+                <div class="tech-badge">Riverpod State</div>
+                <div class="tech-badge">Dark Theme</div>
+                <div class="tech-badge">Email/Password Auth</div>
+                <div class="tech-badge">FCM Push</div>
+                <div class="tech-badge">RTL Support (Arabic)</div>
+            </div>
+            <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(0, 168, 132, 0.2);">
+                Built with ❤️ using pure HTML/CSS • Resayil Platform 🚀
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status - Resayil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background: #111b21;
+            border-radius: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            border: 12px solid #000;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 30px;
+            background: #000;
+            border-radius: 0 0 40px 40px;
+            z-index: 100;
+        }
+
+        .status-bar {
+            height: 44px;
+            background: #1f2c34;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            padding-top: 16px;
+        }
+
+        .app-bar {
+            background: #1f2c34;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #233138;
+        }
+
+        .app-bar h1 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #e9edef;
+        }
+
+        .menu-btn {
+            background: transparent;
+            border: none;
+            color: #e9edef;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .status-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid #233138;
+            display: flex;
+            gap: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .status-item:hover {
+            background: rgba(0, 168, 132, 0.05);
+        }
+
+        .status-item.my-status {
+            background: rgba(0, 168, 132, 0.08);
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 52px;
+            height: 52px;
+            flex-shrink: 0;
+        }
+
+        .avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00a884 0%, #008069 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 22px;
+        }
+
+        .avatar-badge {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            background: #00a884;
+            border-radius: 50%;
+            border: 2px solid #111b21;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+        }
+
+        .avatar-badge.add {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .status-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .status-title {
+            color: #e9edef;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .status-subtitle {
+            color: #8696a0;
+            font-size: 12px;
+        }
+
+        .status-indicator {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 2px solid #00a884;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .status-item.viewed .status-indicator {
+            border-color: #8696a0;
+        }
+
+        .section-label {
+            padding: 12px 16px;
+            color: #8696a0;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            background: #0b141a;
+            margin-top: 8px;
+        }
+
+        .bottom-nav {
+            height: 80px;
+            background: #1f2c34;
+            border-top: 1px solid #233138;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            padding-top: 8px;
+            padding-bottom: 16px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            flex: 1;
+            cursor: pointer;
+            color: #8696a0;
+            font-size: 24px;
+        }
+
+        .nav-item.active {
+            color: #00a884;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="notch"></div>
+        <div class="status-bar"></div>
+
+        <div class="app-bar">
+            <h1>Status</h1>
+            <button class="menu-btn">⋮</button>
+        </div>
+
+        <div class="content">
+            <div class="status-item my-status">
+                <div class="avatar-container">
+                    <div class="avatar">M</div>
+                    <div class="avatar-badge add">+</div>
+                </div>
+                <div class="status-content">
+                    <div class="status-title">My Status</div>
+                    <div class="status-subtitle">Tap to add status update</div>
+                </div>
+            </div>
+
+            <div class="section-label">Recent Updates</div>
+
+            <div class="status-item">
+                <div class="avatar-container">
+                    <div class="avatar">A</div>
+                    <div class="status-indicator"></div>
+                </div>
+                <div class="status-content">
+                    <div class="status-title">Ahmed Hassan</div>
+                    <div class="status-subtitle">15 minutes ago</div>
+                </div>
+            </div>
+
+            <div class="status-item">
+                <div class="avatar-container">
+                    <div class="avatar">S</div>
+                    <div class="status-indicator"></div>
+                </div>
+                <div class="status-content">
+                    <div class="status-title">Sarah Johnson</div>
+                    <div class="status-subtitle">45 minutes ago</div>
+                </div>
+            </div>
+
+            <div class="status-item">
+                <div class="avatar-container">
+                    <div class="avatar">F</div>
+                    <div class="status-indicator"></div>
+                </div>
+                <div class="status-content">
+                    <div class="status-title">Fatima Khan</div>
+                    <div class="status-subtitle">2 hours ago</div>
+                </div>
+            </div>
+
+            <div class="section-label">Viewed</div>
+
+            <div class="status-item viewed">
+                <div class="avatar-container">
+                    <div class="avatar">M</div>
+                    <div class="status-indicator"></div>
+                </div>
+                <div class="status-content">
+                    <div class="status-title">Mohammed Ali</div>
+                    <div class="status-subtitle">Yesterday</div>
+                </div>
+            </div>
+
+            <div class="status-item viewed">
+                <div class="avatar-container">
+                    <div class="avatar">N</div>
+                    <div class="status-indicator"></div>
+                </div>
+                <div class="status-content">
+                    <div class="status-title">Nora Ibrahim</div>
+                    <div class="status-subtitle">Yesterday</div>
+                </div>
+            </div>
+
+            <div class="status-item viewed">
+                <div class="avatar-container">
+                    <div class="avatar">O</div>
+                    <div class="status-indicator"></div>
+                </div>
+                <div class="status-content">
+                    <div class="status-title">Omar Saeed</div>
+                    <div class="status-subtitle">2 days ago</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="nav-item">
+                <span>💬</span>
+                <div class="nav-label">Chats</div>
+            </div>
+            <div class="nav-item">
+                <span>📞</span>
+                <div class="nav-label">Contacts</div>
+            </div>
+            <div class="nav-item active">
+                <span>✨</span>
+                <div class="nav-label">Status</div>
+            </div>
+            <div class="nav-item">
+                <span>👤</span>
+                <div class="nav-label">Profile</div>
+            </div>
+            <div class="nav-item">
+                <span>⚙️</span>
+                <div class="nav-label">Settings</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
