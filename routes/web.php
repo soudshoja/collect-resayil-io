@@ -108,3 +108,6 @@ Route::middleware(['auth', 'agency.active'])->group(function () {
         ->middleware('role:admin')
         ->defaults('agency', null);
 });
+
+// Platform owner routes
+require __DIR__.'/platform.php';

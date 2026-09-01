@@ -14,13 +14,13 @@ class EnsureAgencyActive
     public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
-
+        
         if (!$user) {
             return redirect()->route('login');
         }
 
-        // Super admin doesn't need an agency
-        if ($user->isSuperAdmin()) {
+        // Platform owners and super admins don't need an agency
+        if ($user->isPlatformOwner() || $user->isSuperAdmin()) {
             return $next($request);
         }
 
